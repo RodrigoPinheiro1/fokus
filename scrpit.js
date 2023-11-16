@@ -5,8 +5,19 @@ const curtoBt = document.querySelector('.app__card-button--curto')
 const longoBt = document.querySelector('.app__card-button--longo')
 const banner = document.querySelector('.app__image')
 const titulo = document.querySelector('.app__title')
+const musicaInput = document.querySelector('#alternar-musica')
 const botoes = document.querySelectorAll('.app__card-button')
 
+const musica = new Audio('sons/luna-rise-part-one.mp3')
+
+musica.loop = true;
+musicaInput.addEventListener('change', () => {
+    if (musica.paused) {
+        musica.play();
+    } else {
+        musica.pause();
+    }
+});
 
 function alterarContexto(valor) {
 
@@ -15,7 +26,7 @@ function alterarContexto(valor) {
     // botaoActive.setAttribute('data-contexto',`app__card-button--${valor}`)
 
 
-    botoes.forEach(function (valor){
+    botoes.forEach(function (valor) {
         valor.classList.remove('active')
     })
 
