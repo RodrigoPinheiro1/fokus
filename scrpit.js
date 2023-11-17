@@ -6,16 +6,27 @@ const longoBt = document.querySelector('.app__card-button--longo')
 const banner = document.querySelector('.app__image')
 const titulo = document.querySelector('.app__title')
 const musicaInput = document.querySelector('#alternar-musica')
+const startPauseBt = document.querySelector('#start-pause')
+const startPauseSpanBt = document.querySelector('#start-pause span')
 const botoes = document.querySelectorAll('.app__card-button')
 
-const musica = new Audio('sons/luna-rise-part-one.mp3')
+const musicaFundo = new Audio('sons/luna-rise-part-one.mp3')
+const audioBeep = new Audio('sons/beep.mp3');
+const audioPause = new Audio(`sons/pause.mp3`);
+const audioPlay = new Audio(`sons/play.mp3`);
 
-musica.loop = true;
+
+musicaFundo.loop = true;
+
+let temporizadorEmSegundos = 5;
+let intervaloId = null;
+
+
 musicaInput.addEventListener('change', () => {
-    if (musica.paused) {
-        musica.play();
+    if (musicaFundo.paused) {
+        musicaFundo.play();
     } else {
-        musica.pause();
+        musicaFundo.pause();
     }
 });
 
@@ -58,3 +69,41 @@ longoBt.addEventListener('click', () => {
     alterarContexto('descanso-longo')
     longoBt.classList.add('active')
 });
+
+const contagemRegressiva = () => {
+
+    if (temporizadorEmSegundos <= 0) {
+        // audioBeep.play();
+        alert('sem tempo')
+        zerar();
+    }
+    temporizadorEmSegundos -= 1;
+    console.log(temporizadorEmSegundos)
+
+}
+
+
+startPauseBt.addEventListener('click', iniciar)
+
+function iniciar() {
+
+
+    if (intervaloId) {
+        audioPlay.play();
+        zerar()
+        return;
+    }
+
+    audioPlay.play();
+    intervaloId = setInterval(contagemRegressiva, 1000) //milisegundos
+
+
+    startPauseSpanBt.textContent = "pausar"
+}
+
+
+function zerar() {
+    audioPause.play();
+    clearInterval(intervaloId);
+    intervaloId = null;
+}
