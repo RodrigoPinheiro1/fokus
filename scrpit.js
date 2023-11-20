@@ -9,6 +9,7 @@ const imagenPlayPauseBt = document.querySelector('.app__card-primary-butto-icon'
 const musicaInput = document.querySelector('#alternar-musica')
 const startPauseBt = document.querySelector('#start-pause')
 const startPauseSpanBt = document.querySelector('#start-pause span')
+const tempoTela = document.querySelector('#timer')
 // const startPauseImgBt = document.querySelector('#start-pause img')
 const botoes = document.querySelectorAll('.app__card-button')
 
@@ -21,7 +22,7 @@ const audioPlay = new Audio(`sons/play.mp3`);
 
 musicaFundo.loop = true;
 
-let temporizadorEmSegundos = 5;
+let temporizadorEmSegundos = 1500;
 let intervaloId = null;
 
 
@@ -35,6 +36,7 @@ musicaInput.addEventListener('change', () => {
 
 function alterarContexto(valor) {
 
+    mostrarTempo();
     html.setAttribute('data-contexto', `${valor}`)
     banner.setAttribute('src', `imagens/${valor}.png`)
     // botaoActive.setAttribute('data-contexto',`app__card-button--${valor}`)
@@ -61,14 +63,18 @@ function alterarContexto(valor) {
 }
 
 focoBt.addEventListener('click', () => {
+    temporizadorEmSegundos = 1500;
+
     alterarContexto('foco')
     focoBt.classList.add('active')
 });
 curtoBt.addEventListener('click', () => {
+     temporizadorEmSegundos = 300;
     alterarContexto('descanso-curto')
     curtoBt.classList.add('active')
 });
 longoBt.addEventListener('click', () => {
+     temporizadorEmSegundos = 900;
     alterarContexto('descanso-longo')
     longoBt.classList.add('active')
 });
@@ -76,12 +82,13 @@ longoBt.addEventListener('click', () => {
 const contagemRegressiva = () => {
 
     if (temporizadorEmSegundos <= 0) {
-        // audioBeep.play();
+        audioBeep.play();
         alert('sem tempo')
         zerar();
+        return
     }
     temporizadorEmSegundos -= 1;
-    console.log(temporizadorEmSegundos)
+    mostrarTempo();
 
 }
 
@@ -89,7 +96,6 @@ const contagemRegressiva = () => {
 startPauseBt.addEventListener('click', iniciar)
 
 function iniciar() {
-
 
     if (intervaloId) {
         audioPlay.play();
@@ -126,3 +132,15 @@ function zerar() {
     clearInterval(intervaloId);
     intervaloId = null;
 }
+
+
+function mostrarTempo() {
+    const tempo = new Date(temporizadorEmSegundos * 1000);
+    const tempoFormatado = tempo.toLocaleString('pt-Br', {minute: '2-digit', second: '2-digit'});
+    tempoTela.innerHTML = `${tempoFormatado}`
+}
+
+
+mostrarTempo();
+
+
